@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
+    
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            if UIScreen.main.bounds.height < 750 {
+                ScrollView(.vertical, showsIndicators: false) {
+                    LoginView()
+                }
+            } else {
+                SignUpView()
+            }
         }
-        .padding()
     }
 }
 
