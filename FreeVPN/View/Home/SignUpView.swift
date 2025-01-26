@@ -106,7 +106,7 @@ struct SignUpView: View {
                         .frame(maxWidth: .infinity)
                         .background(Color.clear)
                         .overlay(
-                            RoundedRectangle(cornerRadius: 10)
+                            RoundedRectangle(cornerRadius: 40)
                                 .stroke(Color.gray, lineWidth: 1)
                         )
                     }
@@ -117,7 +117,7 @@ struct SignUpView: View {
                         HStack {
                             Image(systemName: "applelogo") // Placeholder for Apple logo
                                 .resizable()
-                                .frame(width: 24, height: 24)
+                                .frame(width: 30, height: 30)
                                 .foregroundColor(.gray)
                             Text("Sign up with Apple")
                                 .font(.headline)
@@ -125,8 +125,11 @@ struct SignUpView: View {
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(Color.black)
-                        .cornerRadius(10)
+                        .background(Color.clear)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 40)
+                                .stroke(Color.gray, lineWidth: 1)
+                        )
                     }
                 }
                 

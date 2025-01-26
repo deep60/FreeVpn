@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct TabView: View {
-    @State private var selectedTab = 0
+    @State private var index = 0
     var body: some View {
         VStack {
-            if selectedTab == 0 {
+            if index == 0 {
                 LoginView()
             } else {
                 SignUpView()
