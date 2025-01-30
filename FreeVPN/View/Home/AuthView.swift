@@ -28,6 +28,8 @@ struct AuthView: View {
     
     var body: some View {
         ScrollView(showsIndicators: false) {
+            TopView(authType: $authType)
+            
             SegmentedView(authType: $authType)
             
             SocialApp()
@@ -96,6 +98,45 @@ struct AuthView: View {
                         }
                     }
                     .opacity(isPasswordVisible ? 0 : 1)
+                    
+                    if authType == .signUp {
+                        TextField(text: $password) {
+                            Text("Confirm Your Password")
+                        }
+                        .focused($isPassFocused)
+                        .textFieldStyle(AuthTextFieldStyle(isFocused: $isPassFocused))
+                        .overlay(alignment: .trailing, content: {
+                            Button {
+                                withAnimation {
+                                    isPasswordVisible.toggle()
+                                }
+                            } label: {
+                                Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
+                                    .padding()
+                                    .foregroundStyle(Color(UIColor.lightGray))
+                            }
+                        })
+                        .opacity(isPasswordVisible ? 1 : 0)
+                        .zIndex(1)
+                        
+                        SecureField(text: $password) {
+                            Text("Confirm Your Password")
+                        }
+                        .focused($isPassFocused)
+                        .textFieldStyle(AuthTextFieldStyle(isFocused: $isPassFocused))
+                        .overlay(alignment: .trailing) {
+                            Button {
+                                withAnimation {
+                                    isPasswordVisible.toggle()
+                                }
+                            } label: {
+                                Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
+                                    .padding()
+                                    .foregroundStyle(Color(UIColor.lightGray))
+                            }
+                        }
+                        .opacity(isPasswordVisible ? 0 : 1)
+                    }
                 }
                 
                 if authType == .signUp {
@@ -110,7 +151,7 @@ struct AuthView: View {
                 }
             }
             
-            BottomView(authType: $authType)
+            
             
             Button {
                 
@@ -118,8 +159,41 @@ struct AuthView: View {
                 Text(authType == .login ? "Login" : "Sign Up")
             }
             .buttonStyle(AuthButtonType())
+            
+            
+            BottomView(authType: $authType)
         }
         .padding()
+        .gesture(
+            TapGesture()
+                .onEnded({
+                    isEmailFoocused = false
+                    isPassFocused = false
+                })
+        )
+    }
+}
+
+#Preview {
+    AuthView()
+}
+
+struct TopView: View {
+    @Environment(\.colorScheme) private var colorScheme
+    @Binding var authType: AuthType
+    
+    var body: some View {
+        VStack(spacing: 15) {
+            VStack(spacing: 15) {
+                Text(authType == .login ?  "Welcome Back!" : "Create an account")
+                    .font(.system(size: 35, weight: .heavy, design: .rounded))
+                
+                Text(authType == .login ?  "The VPN App is for free 1 month trial. Make sure you use accurate information." : "The VPN App is for free 1 month trial. Make sure you use accurate information.")
+                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(Color.gray)
+            }
+        }
     }
 }
 
@@ -129,12 +203,13 @@ struct AgreeStyle: ToggleStyle {
             configuration.isOn.toggle()
         } label: {
             Image(systemName: configuration.isOn ? "checkmark.square" : "square")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(width: 20)
+                .contentTransition(.opacity)
         }
+        .tint(.primary)
     }
-}
-
-#Preview {
-    AuthView()
 }
 
 struct AuthButtonType: ButtonStyle {
@@ -234,11 +309,11 @@ struct AuthTextFieldStyle: TextFieldStyle {
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .stroke(isFocused.wrappedValue ? Color.blue : Color.gray.opacity(0.5), lineWidth: 1)
+                        .stroke(isFocused.wrappedValue ? Color.blue : Color.gray.opacity(1), lineWidth: 1)
                         .zIndex(1)
                     
                     RoundedRectangle(cornerRadius: 18)
-                        .fill(colorScheme == .light ? Color(.lightGray) : Color(uiColor: UIColor.darkGray))
+                        .fill(colorScheme == .light ? Color(.lightGray) : Color(uiColor: UIColor.systemBackground))
                         .zIndex(0)
                 }
             )
@@ -266,7 +341,7 @@ struct BottomView: View {
                         }
                     }
                 } label: {
-                    Text(authType == .login ? "SignUp" : "Login")
+                    Text(authType == .login ? "SignUp" : "LogIn")
                         .font(.system(size: 15, weight: .bold, design: .rounded))
                 }
             }
@@ -312,7 +387,7 @@ struct SocialApp: View {
                 }
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color.black)
+                .background(Color.clear)
                 .overlay(
                     RoundedRectangle(cornerRadius: 40)
                         .stroke(Color.gray, lineWidth: 1)

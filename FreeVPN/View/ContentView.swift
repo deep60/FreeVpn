@@ -11,13 +11,7 @@ struct ContentView: View {
     
     var body: some View {
         VStack {
-            if UIScreen.main.bounds.height < 750 {
-                ScrollView(.vertical, showsIndicators: false) {
-                    LoginView()
-                }
-            } else {
-                SignUpView()
-            }
+            Text("Hello World")
         }
     }
 }
