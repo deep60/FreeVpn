@@ -16,7 +16,7 @@ struct MainPageView: View {
                     Color(red: 0.2, green: 0.1, blue: 0.5),
                     Color(red: 0.1, green: 0.05, blue: 0.3)
                 ]), startPoint: .topLeading, endPoint: .bottomTrailing
-            )
+            ).opacity(0.2)
             .edgesIgnoringSafeArea(.all)
             
             VStack(spacing: 20) {
@@ -25,7 +25,7 @@ struct MainPageView: View {
                         print("Menu Bar")
                     } label: {
                         Image(systemName: "circle.grid.2x2")
-                            .foregroundStyle(Color.white)
+                            .foregroundStyle(Color.black)
                             .font(.system(size: 30, weight: .medium, design: .monospaced))
                     }
                     
@@ -62,12 +62,7 @@ struct PremiumButtonType: ButtonStyle {
             .padding(.vertical, 10)
             .foregroundStyle(Color.white)
             .font(.system(size: 18, weight: .bold, design: .rounded))
-            .background(
-                LinearGradient(stops: [
-                    .init(color: .purple, location: 0.0),
-                    .init(color: .accentColor, location: 1.0)
-                ], startPoint: .leading, endPoint: .trailing)
-            )
+            .background(Color(red: 92 / 255, green: 65 / 255, blue: 93 / 255))
             .overlay(
                 Image(systemName: "crown.fill")
                     .foregroundStyle(.yellow)
@@ -84,12 +79,12 @@ struct TimeView: View {
     var body: some View {
         VStack {
             Text("Connecting Time")
-                .foregroundStyle(.white.opacity(0.8))
+                .foregroundStyle(.black.opacity(0.8))
                 .font(.headline)
             
             Text(timeString(from: elapsedTime))
                 .font(.system(size: 40, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
+                .foregroundStyle(.black.opacity(0.8))
         }
     }
     
@@ -104,52 +99,56 @@ struct TimeView: View {
 struct SpeedView: View {
     var body: some View {
         HStack {
+            Image(systemName: "arrow.down.circle.fill")
+                .foregroundStyle(.red.opacity(1))
+            
             VStack {
-                Image(systemName: "arrow.down.circle.fill")
-                    .foregroundStyle(.red.opacity(1))
                 Text("Download")
-                    .foregroundStyle(.white.opacity(0.8))
                     .font(.caption)
                 Text("348.3 Mbp/s")
-                    .foregroundStyle(.white)
                     .font(.title3)
             }
+            .foregroundStyle(.black.opacity(0.8))
             
             Divider()
-                .frame(height: 50)
-                .background(Color.white)
+                .frame(width: 2 , height: 50)
+                .foregroundStyle(.gray.opacity(0.8))
+            
+            Image(systemName: "arrow.up.circle.fill")
+                .foregroundStyle(.green)
             
             VStack {
-                Image(systemName: "arrow.up.circle.fill")
-                    .foregroundStyle(.green)
                 Text("Upload")
-                    .foregroundStyle(.white.opacity(0.8))
                     .font(.caption)
                 Text("348.3 Mbp/s")
-                    .foregroundStyle(.white)
                     .font(.title3)
             }
+            .foregroundStyle(.black.opacity(0.8))
         }
-        .padding(.horizontal, 30)
-        
-        HStack {
-            Image(systemName: "flag.fill")
-                .foregroundStyle(.white)
-                .font(.title)
+        .padding(.horizontal, 50)
             
-            VStack(alignment: .leading) {
-                Text("United Kingdom")
-                    .foregroundStyle(.white)
-                    .font(.title3.bold())
-                Text("212.369.56.87")
-                    .foregroundColor(.white.opacity(0.7))
-                    .font(.caption)
+            Button {
+                
+            } label: {
+                HStack {
+                    Image(systemName: "flag.fill")
+                        .foregroundStyle(.white)
+                        .font(.title)
+                    
+                    VStack(alignment: .leading) {
+                        Text("United Kingdom")
+                            .font(.title3.bold())
+                        Text("212.369.56.87")
+                            .font(.caption)
+                    }
+                    .foregroundStyle(.black.opacity(0.8))
+                }
+                
+                GlowingButton()
             }
-        }
-        .padding()
-        .background(Color.purple.opacity(0.8))
-        .cornerRadius(20)
-        .padding(.horizontal)
+            .padding()
+            //.background(Color(red: 246 / 255, green: 247 / 255, blue: 235 / 255))
+            .padding(.horizontal)
         
         Spacer()
     }
@@ -181,7 +180,7 @@ struct MainPowerButton: View {
         } label: {
             ZStack {
                 Circle()
-                    .fill(Color.blue)
+                    .fill(Color.purple.opacity(0.8))
                     .overlay(
                         Circle()
                             .stroke(Color.white.opacity(0.5) , lineWidth: 8)
@@ -212,6 +211,31 @@ struct PowerButtonView: View {
             GlowingRingShow()
             
             MainPowerButton(isPressed: $isPressed)
+        }
+    }
+}
+
+struct GlowingButton: View {
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(
+                    RadialGradient(gradient: Gradient(colors: [Color.blue.opacity(0.5), Color.clear]), center: .center, startRadius: 5, endRadius: 50)
+                )
+                .frame(width: 60, height: 60)
+            
+            Button {
+                
+            } label: {
+                Circle()
+                    .fill(Color.black.opacity(0.5))
+                    .frame(width: 50, height: 50)
+                    .overlay(
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundStyle(Color.white)
+                    )
+            }
         }
     }
 }
